@@ -5,16 +5,22 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.danielacamus.modelos.Cancion;
 import com.danielacamus.servicios.ServicioCanciones;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class ControladorCanciones {
     
     @Autowired
+    // le permite al Controlador encargar peticiones de datos procesados por el Servicio
     private ServicioCanciones servicio;
 
     @GetMapping("/canciones")
@@ -35,6 +41,22 @@ public class ControladorCanciones {
         modelo.addAttribute("cancion", cancionEncontrada);
         // DESPACHO
         return "detalleCancion.jsp";
+    }
+    
+    @GetMapping("/canciones/formulario/agregar")
+    public String formularioAgregarCancion(Model modelo) {
+        modelo.addAttribute("cancion", new Cancion());
+        return "agregarCancion.jsp";
+    }
+
+    // Agrega la canción a la base de datos. Redirige a la ruta de “/canciones”. En caso de que el formulario no pase alguna validación hay que cargar el mismo formulario agregarCancion.jsp para mostrar los errores.
+    @PostMapping("/canciones/procesa/agregar")
+    public String procesarAgregarCancion(@Valid @ModelAttribute("cancion") Cancion cancion, BindingResult validaciones) {
+        if (validaciones.hasErrors()) {
+            return "agregarCancion.jsp";
+        }
+        servicio.agregarCancion(cancion);
+        return "redirect:/canciones";
     }
 
 }
