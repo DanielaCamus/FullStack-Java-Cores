@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import com.danielacamus.modelos.Cancion;
 import com.danielacamus.servicios.ServicioCanciones;
@@ -58,5 +59,25 @@ public class ControladorCanciones {
         servicio.agregarCancion(cancion);
         return "redirect:/canciones";
     }
+
+    // Ruta a utilizar “/canciones/formulario/editar/{idCancion}”. Devuelve un objeto Cancion dado el idCancion para ser enviado a la vista JSP editarCancion.jsp. Este formulario cuenta con todos los campos/atributos de una canción y deben de estar precargados con la información de la canción actual.
+    @GetMapping("/canciones/formulario/editar/{idCancion}")
+	public String formularioEditarCancion(@PathVariable Long idCancion, Model modelo) {
+		Cancion cancion = servicio.obtenerCancionPorId(idCancion);
+		modelo.addAttribute("cancion", cancion);
+		return "editarCancion.jsp";
+	}
+
+    // Ruta a utilizar “/canciones/procesa/editar/{idCancion}”. Edita la canción dado el id recibido como parámetro. Redirige a la ruta de “/canciones”. En caso de que el formulario no pase alguna validación hay que redirigir al mismo formulario editarCancion.jsp para mostrar los errores.
+	@PutMapping("/canciones/procesa/editar/{idCancion}")
+	public String procesarEditarCancion(@Valid @ModelAttribute("cancion") Cancion cancion,
+		BindingResult resultadoValidacion, @PathVariable Long idCancion) {
+		if (resultadoValidacion.hasErrors()) {
+			return "editarCancion.jsp";
+		}
+		cancion.setId(idCancion);
+		servicio.actualizaCancion(cancion);
+		return "redirect:/canciones";
+	}
 
 }
