@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,13 +72,20 @@ public class ControladorCanciones {
     // Ruta a utilizar “/canciones/procesa/editar/{idCancion}”. Edita la canción dado el id recibido como parámetro. Redirige a la ruta de “/canciones”. En caso de que el formulario no pase alguna validación hay que redirigir al mismo formulario editarCancion.jsp para mostrar los errores.
 	@PutMapping("/canciones/procesa/editar/{idCancion}")
 	public String procesarEditarCancion(@Valid @ModelAttribute("cancion") Cancion cancion,
-		BindingResult resultadoValidacion, @PathVariable Long idCancion) {
-		if (resultadoValidacion.hasErrors()) {
+		BindingResult validaciones, @PathVariable Long idCancion) {
+		if (validaciones.hasErrors()) {
 			return "editarCancion.jsp";
 		}
 		cancion.setId(idCancion);
-		servicio.actualizaCancion(cancion);
+		this.servicio.actualizaCancion(cancion);
 		return "redirect:/canciones";
 	}
+
+    // Ruta a utilizar “/canciones/eliminar/{idCancion}”. Elimina la canción dado el id recibido como parámetro. Redirige a la ruta de “/canciones”.
+    @DeleteMapping("/canciones/eliminar/{idCancion}")
+    public String procesarEliminarCancion(@PathVariable Long idCancion) {
+        this.servicio.eliminaCancion(idCancion);
+        return "redirect:/canciones";
+    }
 
 }

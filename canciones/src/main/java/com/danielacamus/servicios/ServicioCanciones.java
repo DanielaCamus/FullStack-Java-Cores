@@ -45,4 +45,9 @@ public class ServicioCanciones {
         // Envía la entidad final a la base de datos para sobreescribir el registro anterior y retorna el resultado de esa operación al controlador.
 		return repositorio.save(cancion);
 	}
+
+    // Elimina la canción de la base de datos dado el id enviado como parámetro. No tiene valor de retorno.
+    public void eliminaCancion(Long id) {
+        repositorio.deleteById(id);
+    }
 }

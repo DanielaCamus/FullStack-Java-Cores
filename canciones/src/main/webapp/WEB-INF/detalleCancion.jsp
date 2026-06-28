@@ -26,6 +26,11 @@
                     <li><strong>Última actualización:</strong> ${cancion.fechaActualizacion}</li>
                 </ul>
                 <a href="/canciones/formulario/editar/${cancion.id}">Actualizar canción</a>
+                <br><br>
+                <form:form action="/canciones/eliminar/${cancion.id}" method="POST">
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <button type="submit">Eliminar canción</button>
+                </form:form>
             </c:when>
             
             <c:otherwise>
