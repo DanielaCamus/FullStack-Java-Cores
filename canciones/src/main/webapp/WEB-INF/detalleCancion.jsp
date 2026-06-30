@@ -2,6 +2,7 @@
 <%@ page import="java.util.*, java.text.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page isErrorPage="true" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -13,12 +14,12 @@
     <body>
 
         <c:choose>
-            <c:when test="${cancion != null}">
+            <c:when test="${not empty cancion}">
                 <h1>Detalle de la canción</h1>
                 <ul>
                     <li><strong>ID:</strong> ${cancion.id}</li>
                     <li><strong>Título:</strong> ${cancion.titulo}</li>
-                    <li><strong>Artista:</strong> ${cancion.artista}</li>
+                    <li><strong>Artista:</strong> ${cancion.artista.nombre} ${cancion.artista.apellido}</li>
                     <li><strong>Álbum:</strong> ${cancion.album}</li>
                     <li><strong>Género:</strong> ${cancion.genero}</li>
                     <li><strong>Idioma:</strong> ${cancion.idioma}</li>

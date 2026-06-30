@@ -1,5 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*, java.text.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page isErrorPage="true" %>
 
 <!DOCTYPE html>
@@ -24,8 +26,19 @@
             <form:errors path="titulo" />
             <br><br>
             <form:label path="artista">Artista:</form:label>
-            <form:input path="artista" />
-            <form:errors path="artista" />
+            <select name="idArtista" required>
+                <option value="">Selecciona un artista</option>
+                <c:forEach items="${artistas}" var="artista">
+                    <c:choose>
+                        <c:when test="${artista.id == cancion.artista.id}">
+                            <option value="${artista.id}" selected>${artista.nombre} ${artista.apellido}</option>
+                        </c:when>
+                        <c:otherwise>
+                            <option value="${artista.id}">${artista.nombre} ${artista.apellido}</option>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+            </select>
             <br><br>
             <form:label path="album">Álbum:</form:label>
             <form:input path="album" />
